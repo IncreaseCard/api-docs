@@ -38,7 +38,7 @@ Any error with a 5XX error is a server-side error. These mean that either the ap
 API Resources
 -----------------
 
-* [Installment Discounts](https://github.com/increasecard/blob/master/resources/installment-discount.rd)
+* [Installment Discounts](https://github.com/increasecard/blob/master/resources/installment-discount.md)
 
 
 Contact us
