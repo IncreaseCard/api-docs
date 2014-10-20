@@ -38,8 +38,9 @@ Any error with a 5XX error is a server-side error. These mean that either the ap
 API Resources
 -----------------
 
+* [Sessions](https://github.com/IncreaseCard/api-docs/blob/master/resources/sessions.md)
+* [Operations](https://github.com/IncreaseCard/api-docs/blob/master/resources/operations.md)
 * [Installment Discounts](https://github.com/IncreaseCard/api-docs/blob/master/resources/installment-discount.md)
-
 
 Contact us
 ----------
