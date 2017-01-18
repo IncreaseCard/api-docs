@@ -1,0 +1,2014 @@
+FORMAT: 1A
+
+HOST: https://api.increasecard.com/api/v1
+
+# Increaseard Public API
+
+Public API for Increase services
+
+# Group Clients
+
+Endpoints for Client authentication and information
+
+## Authentication [/oauth/token]
+
+Resource to authenticate a Client with an associated OAuth Application.
+
+An OAuth Application **app_id** and **app_secret** is **required**.
+
+### Client authentication [POST]
+
+Generates an **access_token** for a given Client and OAuth Application and an **refresh_id**
+
+*Note: An __access_token__ is unique to a given Client and Device. This __access_token__ goes
+afterwards in the __Authorization__ Header of subsequent requests. The __refresh_id__ is unique
+per Client and Device and is unique for the __access_token__. The __refresh_id__ will be use in
+the __refresh_token__ endpoint. The __refresh_id__ changes only when the Client is unauthorized and requests new authorization again*
+
+
++ Request (application/json)
+
+    Request with valid information
+
+    + Header
+
+            Accept: application/json
+
+    + Body
+
+            {
+                "email": "test@increasecard.com",
+                "password": "mypassword",
+                "app_id": "258e08d5fc22b07e786a4a4c570c5bad",
+                "app_secret": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ"
+            }
+
++ Response 200 (application/json)
+
+            {
+                "access_token": "eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ",
+                "refresh_id": "KV1QiLCJhbiAoOiJIUzI1"
+            }
+
++ Request (application/json)
+
+    Request with invalid client information
+
+    + Header
+
+            Accept: application/json
+
+    + Body
+
+            {
+                "email": "invalid_email@increasecard.com",
+                "password": "mypassword",
+                "app_id": "258e08d5fc22b07e786a4a4c570c5bad",
+                "app_secret": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ"
+            }
+
++ Response 401 (application/json)
+
+        {   "error": "Invalid email or password"    }
+
++ Request (application/json)
+
+    Request with invalid OAuth Application information
+
+    + Header
+
+            Accept: application/json
+
+    + Body
+
+            {
+                "email": "test@increasecard.com",
+                "password": "mypassword",
+                "app_id": "invalid_app_id",
+                "app_secret": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ"
+            }
+
++ Response 401 (application/json)
+
+        {   "error": "Invalid app_id or app_secret" }
+
+
+## Authentication Refresh Token [/oauth/refresh_token]
+
+Resource to refresh the token of a given Client and **access_token**.
+
+The **refresh_id** got from the login request is **required**.
+
+When a response from server returns the custom http header `X-Expiration-Warning`
+it means the expiration date of the token is near and it's recommended to get a
+new `access_token` with a refresh. If the token is not refreshed in a certain time, then the
+`access_token` will not longer be valid and the Client must generate a new one.
+
+Despite the `refresh_token` endpoint, the server always unauthorizes a Client after certain time.
+
+### Refresh Token [POST]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+    + Body
+
+            {
+                "refresh_id": "GWERGWER456456456"
+            }
+
++ Response 200
+
+            {
+                "access_token": "fwewwefWEFOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ"
+            }
+
++ Response 403
+
+            {
+                "error": "Warning expiration date has not been reached"
+            }
+
++ Response 401
+
+            {
+                "error": "Invalid refresh_id"
+            }
+
++ Response 401
+
+            {
+                "error": "Access token is not valid anymore"
+            }
+
+
+
+## Invalidates all active sessions [/oauth/invalidate_tokens]
+
+Unauthorizes all active Clients.
+
+### Refresh Token [POST]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+    + Body
+
+            {
+
+            }
+
++ Response 200
+
+            {
+
+            }
+
++ Response 500
+
+            {
+                "error": "Error invalidating all tokens"
+            }
+
+## Client [/clients/me]
+
++ Model (application/json)
+
+        {
+            "first_name": "Juan",
+            "last_name": "Perez",
+            "email": "jperez@hotmail.com",
+            "shop_ids": [1, 2, 3, 4],
+            "admin": false
+        }
+
+### Client Information [GET]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200
+
+    [Client][]
+
+
+
++ Response 401
+
+        {   "error": "Not Authorized"   }
+
+# Group Credentials
+
+A Credential resource contains information about a credit card provider with a given login and password.
+
+## Credential [/api/v1/clients/credentials/{id}]
+
++ Parameters
+    + id: `1` (integer) - The Id of the Credential
+
++ Model (application/json)
+
+        {
+            "id": 1,
+            "login": "login1",
+            "provider": "mastercard",
+            "invalid_login": false,
+            "shop_name": "Sucursal 1"
+        }
+
+### Retrieve a Credential [GET]
+Returns a specific Credential. The current client must be the owner of the credential.
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+
++ Response 200
+
+    [Credential][]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: un_authorized_token
+
++ Response 401
+
+        {   "errors": "Client can't authorized to update credential"    }
+
+### Updates a Credential [PUT]
+Updates a credential password. The current client must be the owner of the credential.
+
+After the password is changed, the Client with be unauthorized.
+
++ Request (application/json)
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+    + Body
+
+            {
+                "password": "new_password",
+                "password_confirmation": "new_password"
+            }
+
++ Response 200  (application/json)
+
+        {}
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: un_authorized_token
+
++ Response 401  (application/json)
+
+        {   error: "Client can't authorized to update credential"   }
+
++ Request (application/json)
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+    + Body
+
+            {
+                "password": "new_password",
+                "password_confirmation": "new_password_different"
+            }
+
++ Response 421  (application/json)
+
+        {   error: "Password and password confirmation don\'t match"    }
+
+
++ Response 500  (application/json)
+
+        {   error: "Error updating password"    }
+
+## Credentials Collection [/clients/credentials{?login,page,invalid_login}]
+
++ Parameters
+    + login (optional, string, `login`)
+        Search by login parameter
+    + page (optional, string)
+        Fetch specific page parameter
+        + Default: 1
+    + invalid_login (optional, string)
+        If you only want to display blocked credentials then send "true", otherwise, leave it blank.
+
++ Model (application/json)
+
+        {
+            "credentials": [
+                {
+                    "id": 1,
+                    "login": "login1",
+                    "provider": "mastercard",
+                    "invalid_login": false,
+                    "shop_name": "Sucursal 1"
+                },
+                {
+                    "id": 2,
+                    "login": "login2",
+                    "provider": "mastercard",
+                    "invalid_login": false,
+                    "shop_name": "Sucursal 2"
+                },
+                {
+                    "id": 3,
+                    "login": "login3",
+                    "provider": "visa",
+                    "invalid_login": true,
+                    "shop_name": "Sucursal 3"
+                }
+            ],
+            "pages": 1
+        }
+
+### Search Credentials [GET]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+
++ Response 200
+
+    [Credentials Collection][]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized" }
+
+# Group Shops
+
+A Shop resource.
+
+## Shops Collection [/shops]
+
++ Model (application/json)
+
+        [
+            {
+                "id": 1,
+                "name": "Sucursal 1",
+                "managers": [
+                    {
+                        "id": 1,
+                        "email": "client1@increasecard.com",
+                        "full_name": "Client1 Test"
+                    },
+                    {
+                        "id": 2,
+                        "email": "client2@increasecard.com",
+                        "full_name": "Client2 Test"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "name": "Sucursal 2",
+                "managers": [
+                    {
+                        "id": 1,
+                        "email": "client1@increasecard.com",
+                        "full_name": "Client1 Test"
+                    }
+                ]
+            }
+        ]
+
+### Retrieve Shops [GET]
+
+Retrieves the Shops of the current client.
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200
+
+    [Shops Collection][]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+# Group Stablishments
+
+Stablishments endpoints with different information about the current client Stablishments.
+
+## Stablishments Collection [/stablishments]
+
++ Model (application/json)
+
+        {
+            "id": 1,
+            "number": "12345678",
+            "shop": "Sucursal Uno",
+            "provider": "visa"
+        }
+
+### Retrieve Stablishments [GET]
+
+Retrieves the Stablishments of the current client.
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200
+
+        {
+            "stablishments": [
+                ,
+                {
+                    "id": 1,
+                    "number": "123456789",
+                    "shop": "Sucursal Uno",
+                    "provider": "mastercard"
+                },
+                {
+                    "id": 2,
+                    "number": "123456789",
+                    "shop": "Sucursal Dos",
+                    "provider": "naranja"
+                },
+                {
+                    "id": 3,
+                    "number": "123456789",
+                    "shop": "Sucursal Uno",
+                    "provider": "mastercard"
+                },
+                {
+                    "id": 4,
+                    "number": "123456789",
+                    "shop": "Sucursal Dos",
+                    "provider": "amex"
+                }
+              ],
+              "pages": 1
+        }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+
+## Stablishment Summary [/stablishments/:id/monthly_summary]
+
+### Retrieve Stablishment Summary [GET]
+
+Retrieves the summary of the selected stablishment.
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+    + Body
+
+            {
+                "daterange": "09/2015"
+            }
+
++ Response 200
+
+        {
+              "month": 8,
+              "year": 2016,
+              "number": "12345678",
+              "pdf_link": "https://s3.example.com/file/1.pdf",
+              "total_presented": 12345,
+              "total_earn": 12345,
+              "total_discount": 12345,
+              "presented_details":
+              {
+                "debit": 12345,
+                "credit": 12345,
+                "credit_with_installments": 12345,
+                "chargebacks": 1233
+              },
+              "discounts": {
+                "financialcost": 123,
+                "other": 123,
+                "selldiscounts": 12345,
+                "arancel": 12345,
+                "taxes": [
+                  {
+                    "category": "iva",
+                    "subcategory": "10,50",
+                    "amount_cents": 123
+                  }
+                ],
+                "withholdings": [
+                  {
+                    "category": "IIBB",
+                    "subcategory": "Buenos Aires",
+                    "amount_cents": 123
+                  }
+                ],
+                "perceptions": [
+                  {
+                    "category": "IVA",
+                    "subcategory": "",
+                    "amount_cents": 123
+                  }
+                ]}
+            }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+    + Body
+
+            {
+                "daterange": "09/2015"
+            }
+
++ Response 422 (application/json)
+
+        Returned if the user does not have access to the requested stablishment
+
+        {   "error": "User not authorized"   }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+# Group Clearings
+
+Clearing endpoints with different information about the current client Clearings.
+
+## Index [/clearings{?page,daterange,shop_id,stablishment_number}]
+
+Returns the Clearing of the current client.
+
++ Parameters
+    + page (optional, integer)
+        Page number to get
+        + Default: 1
+    + daterange (optional, string, `29/05/2015 - 29/05/2015`)
+        Filter by date range.
+    + shop_id (optional, string)
+        Filter by shop id
+    + stablishment_number (optional, string, `123456789`)
+        Filter by stablishment number
+
+### Index [GET]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+        {
+          "clearings": [
+            {
+              "report_date": "2016-07-26",
+              "payment_date": "2016-07-27",
+              "clearing_number": "000000008429",
+              "payer": "017 BBVA BANCO FRANCES S.A.",
+              "provider": "visa",
+              "branch_office": "111 OFFICE",
+              "bank_address": "AV.L.N.ALEM        996 CP 1001",
+              "bank_cuit": "11 1111111 1",
+              "nature": "Resp.Inscripto",
+              "retention_agent": "0000011111111",
+              "store_cuit": "11-11111111-1",
+              "store_nature": "IVA RESPONSABLE INSCRIPTO",
+              "store_gross_income": "0000111111111",
+              "store_number": "111111111",
+              "store_name": "SUCURSAL UNO",
+              "store_address": "",
+              "total_amount": {
+                "currency": "ARS",
+                "amount": 5905240
+              },
+              "total_deduction": {
+                "currency": "ARS",
+                "amount": 840769
+              },
+              "total_earn": {
+                "currency": "ARS",
+                "amount": 5064471
+              },
+              "credit_card_provider": "visa",
+              "transactions": [
+                {
+                  "card_type": "visa",
+                  "description": "3 Ventas en    3 pag. Plan Cuotas",
+                  "value": {
+                    "fractional": "559700.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "installment_number": null,
+                  "shop_name": "Sucursal Uno",
+                  "pay_date": "2016-07-27",
+                  "batch_number": "0649",
+                  "card": null,
+                  "amount_cents": 559700,
+                  "voucher": null,
+                  "date": "2016-07-25",
+                  "presentation_date": null,
+                  "total_amount": {
+                    "fractional": "559700.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "authorization_number": null,
+                  "clearing_number": null,
+                  "payment_transaction_type": null,
+                  "tna": null,
+                  "cft": null,
+                  "promo_percentage_buyer": null,
+                  "promo_percentage_seller": null,
+                  "installment": "3",
+                  "clearing_table_id": 633291
+                },
+                {
+                  "card_type": "visa",
+                  "description": "5 Ventas en    3 pag. Plan Cuotas",
+                  "value": {
+                    "fractional": "1149500.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "installment_number": null,
+                  "shop_name": "Sucursal Uno",
+                  "pay_date": "2016-07-27",
+                  "batch_number": "0650",
+                  "card": null,
+                  "amount_cents": 1149500,
+                  "voucher": null,
+                  "date": "2016-07-25",
+                  "presentation_date": null,
+                  "total_amount": {
+                    "fractional": "1149500.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "authorization_number": null,
+                  "clearing_number": null,
+                  "payment_transaction_type": null,
+                  "tna": null,
+                  "cft": null,
+                  "promo_percentage_buyer": null,
+                  "promo_percentage_seller": null,
+                  "installment": "3",
+                  "clearing_table_id": 633291
+                },
+                {
+                  "card_type": "visa",
+                  "description": "1 Venta en    2 pag. Plan Cuotas",
+                  "value": {
+                    "fractional": "70840.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "installment_number": null,
+                  "shop_name": "Sucursal Uno",
+                  "pay_date": "2016-07-27",
+                  "batch_number": "0651",
+                  "card": null,
+                  "amount_cents": 70840,
+                  "voucher": null,
+                  "date": "2016-07-25",
+                  "presentation_date": null,
+                  "total_amount": {
+                    "fractional": "70840.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "authorization_number": null,
+                  "clearing_number": null,
+                  "payment_transaction_type": null,
+                  "tna": null,
+                  "cft": null,
+                  "promo_percentage_buyer": null,
+                  "promo_percentage_seller": null,
+                  "installment": "2",
+                  "clearing_table_id": 633291
+                },
+                {
+                  "card_type": "visa",
+                  "description": "11 Ventas en    3 pag. Plan Cuotas",
+                  "value": {
+                    "fractional": "2823500.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "installment_number": null,
+                  "shop_name": "Sucursal Uno",
+                  "pay_date": "2016-07-27",
+                  "batch_number": "0651",
+                  "card": null,
+                  "amount_cents": 2823500,
+                  "voucher": null,
+                  "date": "2016-07-25",
+                  "presentation_date": null,
+                  "total_amount": {
+                    "fractional": "2823500.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "authorization_number": null,
+                  "clearing_number": null,
+                  "payment_transaction_type": null,
+                  "tna": null,
+                  "cft": null,
+                  "promo_percentage_buyer": null,
+                  "promo_percentage_seller": null,
+                  "installment": "3",
+                  "clearing_table_id": 633291
+                },
+                {
+                  "card_type": "visa",
+                  "description": "3 Ventas Tj.D bito",
+                  "value": {
+                    "fractional": "332700.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "installment_number": null,
+                  "shop_name": "Sucursal Uno",
+                  "pay_date": "2016-07-27",
+                  "batch_number": "0649",
+                  "card": null,
+                  "amount_cents": 332700,
+                  "voucher": null,
+                  "date": "2016-07-25",
+                  "presentation_date": null,
+                  "total_amount": {
+                    "fractional": "332700.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "authorization_number": null,
+                  "clearing_number": null,
+                  "payment_transaction_type": null,
+                  "tna": null,
+                  "cft": null,
+                  "promo_percentage_buyer": null,
+                  "promo_percentage_seller": null,
+                  "installment": "0",
+                  "clearing_table_id": 633291
+                },
+                {
+                  "card_type": "visa",
+                  "description": "3 Ventas Tj.D bito",
+                  "value": {
+                    "fractional": "553700.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "installment_number": null,
+                  "shop_name": "Sucursal Uno",
+                  "pay_date": "2016-07-27",
+                  "batch_number": "0650",
+                  "card": null,
+                  "amount_cents": 553700,
+                  "voucher": null,
+                  "date": "2016-07-25",
+                  "presentation_date": null,
+                  "total_amount": {
+                    "fractional": "553700.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "authorization_number": null,
+                  "clearing_number": null,
+                  "payment_transaction_type": null,
+                  "tna": null,
+                  "cft": null,
+                  "promo_percentage_buyer": null,
+                  "promo_percentage_seller": null,
+                  "installment": "0",
+                  "clearing_table_id": 633291
+                },
+                {
+                  "card_type": "visa",
+                  "description": "5 Ventas Tj.D bito",
+                  "value": {
+                    "fractional": "415300.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "installment_number": null,
+                  "shop_name": "Sucursal Uno",
+                  "pay_date": "2016-07-27",
+                  "batch_number": "0651",
+                  "card": null,
+                  "amount_cents": 415300,
+                  "voucher": null,
+                  "date": "2016-07-25",
+                  "presentation_date": null,
+                  "total_amount": {
+                    "fractional": "415300.0",
+                    "currency": {
+                      "id": "ars",
+                      "alternate_symbols": [
+                        "$m/n",
+                        "m$n"
+                      ],
+                      "decimal_mark": ",",
+                      "disambiguate_symbol": "$m/n",
+                      "html_entity": "&#x20B1;",
+                      "iso_code": "ARS",
+                      "iso_numeric": "032",
+                      "name": "Argentine Peso",
+                      "priority": 100,
+                      "smallest_denomination": 1,
+                      "subunit": "Centavo",
+                      "subunit_to_unit": 100,
+                      "symbol": "$",
+                      "symbol_first": true,
+                      "thousands_separator": "."
+                    },
+                    "bank": {
+                      "rounding_method": null,
+                      "rates": {},
+                      "mutex": {}
+                    }
+                  },
+                  "authorization_number": null,
+                  "clearing_number": null,
+                  "payment_transaction_type": null,
+                  "tna": null,
+                  "cft": null,
+                  "promo_percentage_buyer": null,
+                  "promo_percentage_seller": null,
+                  "installment": "0",
+                  "clearing_table_id": 633291
+                }
+              ],
+              "arancels": [
+                {
+                  "deduction": {
+                    "currency": "ARS",
+                    "amount": 19529
+                  },
+                  "description": "-Arancel Tj.D bito 1,50 %"
+                },
+                {
+                  "deduction": {
+                    "currency": "ARS",
+                    "amount": 138106
+                  },
+                  "description": "-Arancel Tj.Cr dito en Cuotas 3,00 %"
+                }
+              ],
+              "ecommerce_services": [],
+              "no_present_credit_cards": [],
+              "others": [],
+              "refund_discounts": [],
+              "financial_costs": [
+                {
+                  "deduction": {
+                    "currency": "ARS",
+                    "amount": 3821
+                  },
+                  "description": "Ventas en  2 cuotas"
+                },
+                {
+                  "deduction": {
+                    "currency": "ARS",
+                    "amount": 325394
+                  },
+                  "description": "Ventas en  3 cuotas"
+                }
+              ],
+              "perceptions": [],
+              "taxations": [
+                {
+                  "deduction": {
+                    "currency": "ARS",
+                    "amount": 33103
+                  },
+                  "description": "IVA  21,00 %"
+                },
+                {
+                  "deduction": {
+                    "currency": "ARS",
+                    "amount": 34555
+                  },
+                  "description": "IVA  10,50 % Ley 25.063"
+                }
+              ],
+              "withholdings": [
+                {
+                  "deduction": {
+                    "currency": "ARS",
+                    "amount": 132430
+                  },
+                  "description": "IB Cap.Fed.       2,50 %"
+                },
+                {
+                  "deduction": {
+                    "currency": "ARS",
+                    "amount": 100325
+                  },
+                  "description": "IB C rdoba        3,75 %"
+                },
+                {
+                  "deduction": {
+                    "currency": "ARS",
+                    "amount": 53506
+                  },
+                  "description": "Ganancias RG 3311 1,00 %"
+                }
+              ],
+              "additional_services": [],
+              "sell_discounts": []
+            }
+          ],
+          "pages": 12
+        }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+## Summary Totals [/clearings/summary_totals{?daterange,shop_id}]
+
+Returns the Clearings totals values for the current client.
+
++ Parameters
+    + daterange (optional, string, `20/11/2015 - 20/11/2015`)
+        Date range for clearings summary. The default is the current date
+    + shop_id (optional, string)
+        Shop id as a search parameter
+
+### Summary [GET]
+
++ Request (application/json)
+
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+    + Body
+
+            {
+                "daterange": "17/09/2015 - 17/09/2015"
+            }
+
++ Response 200 (application/json)
+
+        {
+            "total_chargebacks": 2072.0,
+            "total_amount": 850259.74,
+            "total_deduction": 132080.26,
+            "total_earn": 718179.48
+        }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+## Next Working Day Summary Totals [/clearings/next_summary_totals{?shop_id}]
+
+Returns the Clearings totals values of the next working day for the current client.
+The **next working day** is calculated in the API.
+
++ Parameters
+    + shop_id (optional, string)
+        Shop id as a search parameter
+
+### Summary [GET]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+        {
+            "total_amount": 184138.82,
+            "total_deduction": 23938.6,
+            "total_earn": 160200.22,
+            "day": "2015-09-30"
+        }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+## Summary By Card Types [/clearings/summary_by_cards{?daterange,shop_id,bank_id}]
+
+Returns the Clearings totals values for the current client grouped by type of provider.
+
++ Parameters
+    + daterange (optional, string, `20/11/2015 - 20/11/2015`)
+        Date range for clearings summary. The default is the current date
+    + shop_id (optional, string)
+        Shop id as a search parameter
+    + bank_id (optional, string)
+        Bank id as a search parameter
+
+### Summary [GET]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+        {
+            "visa": {
+                "debit": 153371.05,
+                "credit": 20055.6,
+                "credit_with_installments": 442185,
+                "total_amount": 607774.06,
+                "total_deduction": 96651.49,
+                "total_earn": 511122.56,
+                "Clearing::Deduction::Arancel": "16047.36",
+                "Clearing::Taxes::Perception": "1020.5",
+                "Clearing::Taxes::Withholding": "31999.17",
+                "Clearing::Deduction::FinancialCost": "40138.22",
+                "Clearing::Deduction::SellDiscount": "147.15",
+                "Clearing::Taxes::Taxation": "7299.09"
+            },
+            "mastercard": {
+                "debit": 42584.05,
+                "credit": 0,
+                "credit_with_installments": 106402.44,
+                "total_amount": 148986.48,
+                "total_deduction": 22726.23,
+                "total_earn": 126260.26,
+                "Clearing::Deduction::Arancel": "3911.51",
+                "Clearing::Taxes::Withholding": "7985.63",
+                "Clearing::Deduction::FinancialCost": "3591.04",
+                "Clearing::Deduction::SellDiscount": "5820.67",
+                "Clearing::Taxes::Taxation": "1417.38"
+            },
+            "amex": {
+                "debit": 0,
+                "credit": 116389.5,
+                "credit_with_installments": 0,
+                "total_amount": 89162.95,
+                "total_deduction": 11939.09,
+                "total_earn": 77223.86,
+                "Clearing::Deduction::Arancel": "3201.52",
+                "Clearing::Taxes::Perception": "27.25",
+                "Clearing::Taxes::Withholding": "5658.01",
+                "Clearing::Deduction::SellDiscount": "846.26",
+                "Clearing::Taxes::Taxation": "332.52",
+                "Clearing::Deduction::Other": "0.0"
+            },
+            "naranja": {
+                "debit": 0,
+                "credit": 0,
+                "credit_with_installments": 0,
+                "total_amount": 0,
+                "total_deduction": 0,
+                "total_earn": 0,
+                "Clearing::Deduction::SellDiscount": 0,
+                "Clearing::Deduction::AdditionalService": 0,
+                "Clearing::Deduction::Arancel": 0,
+                "Clearing::Deduction::FinancialCost": 0,
+                "Clearing::Taxes::Perception": 0,
+                "Clearing::Taxes::Taxation": 0,
+                "Clearing::Taxes::Withholding": 0,
+                "Clearing::Deduction::Other": 0
+            },
+            "others": {
+                "debit": 261.65,
+                "credit": 0,
+                "credit_with_installments": 4074.6,
+                "total_amount": 4336.25,
+                "total_deduction": 763.45,
+                "total_earn": 3572.8,
+                "Clearing::Deduction::Arancel": "130.09",
+                "Clearing::Taxes::Withholding": "240.68",
+                "Clearing::Deduction::FinancialCost": "54.77",
+                "Clearing::Deduction::SellDiscount": "304.83",
+                "Clearing::Taxes::Taxation": "33.08"
+            }
+        }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+## Card Types [/clearings/types]
+
+Retrieves all the different Clearings card types for the current client.
+
+### Types [GET]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+        [
+            "mastercard",
+            "visa",
+            "nativa",
+            "amex",
+            "naranja",
+            "argencard",
+            "cencosud",
+            "centrocard"
+        ]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+
+# Group Operations
+
+## Operations Collection [/operations{?page,daterange,shop_id,direction,by_pay_date,card_type,column}]
+
++ Parameters
+    + page (optional, integer)
+        Page number to get
+        + Default: 1
+    + daterange (optional, string, `29/05/2015 - 29/05/2015`)
+        Filter by date range.
+    + shop_id (optional, string)
+        Filter by shop id
+    + direction (string, `asc`)
+        Order direction. Options: asc, desc
+    + by_pay_date (string, optional)
+        Filter by pay date or by origin date.
+        + Default: `false`
+    + card_type (optional, string, `visa`)
+        Name of card to filter by
+    + column (optional, string, `pay_date`)
+        Name of column to order by
+
++ Model (application/json)
+
+        {
+           "total":1511988.97,
+           "operations":[
+              {
+                 "card_type":"visa",
+                 "description":"CONS. $  ",
+                 "value":{
+                    "fractional":"11000.0",
+                    "currency":{
+                       "id":"ars",
+                       "alternate_symbols":[
+                          "$m/n",
+                          "m$n"
+                       ],
+                       "decimal_mark":",",
+                       "disambiguate_symbol":"$m/n",
+                       "html_entity":"\u0026#x20B1;",
+                       "iso_code":"ARS",
+                       "iso_numeric":"032",
+                       "name":"Argentine Peso",
+                       "priority":100,
+                       "smallest_denomination":1,
+                       "subunit":"Centavo",
+                       "subunit_to_unit":100,
+                       "symbol":"$",
+                       "symbol_first":true,
+                       "thousands_separator":"."
+                    },
+                    "bank":{
+                       "rounding_method":null,
+                       "rates":{
+
+                       },
+                       "mutex":{
+
+                       }
+                    }
+                 },
+                 "installment":"0",
+                 "shop_name":"Sucursal 1",
+                 "pay_date":"2015-10-27",
+                 "batch_number":"97",
+                 "card":"XXXX XXXX XXXX1111",
+                 "plan":"0",
+                 "amount_cents":11000,
+                 "voucher":"0001435 ",
+                 "date":"2015-10-22",
+                 "presentation_date":"2015-09-23",
+                 "total_amount":{
+                    "fractional":"11000.0",
+                    "currency":{
+                       "id":"ars",
+                       "alternate_symbols":[
+                          "$m/n",
+                          "m$n"
+                       ],
+                       "decimal_mark":",",
+                       "disambiguate_symbol":"$m/n",
+                       "html_entity":"\u0026#x20B1;",
+                       "iso_code":"ARS",
+                       "iso_numeric":"032",
+                       "name":"Argentine Peso",
+                       "priority":100,
+                       "smallest_denomination":1,
+                       "subunit":"Centavo",
+                       "subunit_to_unit":100,
+                       "symbol":"$",
+                       "symbol_first":true,
+                       "thousands_separator":"."
+                    },
+                    "bank":{
+                       "rounding_method":null,
+                       "rates":{
+
+                       },
+                       "mutex":{
+
+                       }
+                    }
+                 }
+              },
+              {
+                 "card_type":"visa",
+                 "description":"CONS. $  ",
+                 "value":{
+                    "fractional":"26800.0",
+                    "currency":{
+                       "id":"ars",
+                       "alternate_symbols":[
+                          "$m/n",
+                          "m$n"
+                       ],
+                       "decimal_mark":",",
+                       "disambiguate_symbol":"$m/n",
+                       "html_entity":"\u0026#x20B1;",
+                       "iso_code":"ARS",
+                       "iso_numeric":"032",
+                       "name":"Argentine Peso",
+                       "priority":100,
+                       "smallest_denomination":1,
+                       "subunit":"Centavo",
+                       "subunit_to_unit":100,
+                       "symbol":"$",
+                       "symbol_first":true,
+                       "thousands_separator":"."
+                    },
+                    "bank":{
+                       "rounding_method":null,
+                       "rates":{
+
+                       },
+                       "mutex":{
+
+                       }
+                    }
+                 },
+                 "installment":"0",
+                 "shop_name":"Sucursal 1",
+                 "pay_date":"2015-10-27",
+                 "batch_number":"270",
+                 "card":"XXXX XXXX XXXX1111",
+                 "plan":"0",
+                 "amount_cents":26800,
+                 "voucher":"0001234",
+                 "date":"2015-10-22",
+                 "presentation_date":"2015-09-23",
+                 "total_amount":{
+                    "fractional":"26800.0",
+                    "currency":{
+                       "id":"ars",
+                       "alternate_symbols":[
+                          "$m/n",
+                          "m$n"
+                       ],
+                       "decimal_mark":",",
+                       "disambiguate_symbol":"$m/n",
+                       "html_entity":"\u0026#x20B1;",
+                       "iso_code":"ARS",
+                       "iso_numeric":"032",
+                       "name":"Argentine Peso",
+                       "priority":100,
+                       "smallest_denomination":1,
+                       "subunit":"Centavo",
+                       "subunit_to_unit":100,
+                       "symbol":"$",
+                       "symbol_first":true,
+                       "thousands_separator":"."
+                    },
+                    "bank":{
+                       "rounding_method":null,
+                       "rates":{
+
+                       },
+                       "mutex":{
+
+                       }
+                    }
+                 }
+              },
+              {
+                 "card_type":"visa",
+                 "description":"CONS. $  ",
+                 "value":{
+                    "fractional":"16700.0",
+                    "currency":{
+                       "id":"ars",
+                       "alternate_symbols":[
+                          "$m/n",
+                          "m$n"
+                       ],
+                       "decimal_mark":",",
+                       "disambiguate_symbol":"$m/n",
+                       "html_entity":"\u0026#x20B1;",
+                       "iso_code":"ARS",
+                       "iso_numeric":"032",
+                       "name":"Argentine Peso",
+                       "priority":100,
+                       "smallest_denomination":1,
+                       "subunit":"Centavo",
+                       "subunit_to_unit":100,
+                       "symbol":"$",
+                       "symbol_first":true,
+                       "thousands_separator":"."
+                    },
+                    "bank":{
+                       "rounding_method":null,
+                       "rates":{
+
+                       },
+                       "mutex":{
+
+                       }
+                    }
+                 },
+                 "installment":"0",
+                 "shop_name":"Sucursal 2",
+                 "pay_date":"2015-11-19",
+                 "batch_number":"111",
+                 "card":"XXXX XXXX XXXX1111",
+                 "plan":"0",
+                 "amount_cents":16700,
+                 "voucher":"0001433 ",
+                 "date":"2015-10-22",
+                 "presentation_date":"2015-09-23",
+                 "total_amount":{
+                    "fractional":"16700.0",
+                    "currency":{
+                       "id":"ars",
+                       "alternate_symbols":[
+                          "$m/n",
+                          "m$n"
+                       ],
+                       "decimal_mark":",",
+                       "disambiguate_symbol":"$m/n",
+                       "html_entity":"\u0026#x20B1;",
+                       "iso_code":"ARS",
+                       "iso_numeric":"032",
+                       "name":"Argentine Peso",
+                       "priority":100,
+                       "smallest_denomination":1,
+                       "subunit":"Centavo",
+                       "subunit_to_unit":100,
+                       "symbol":"$",
+                       "symbol_first":true,
+                       "thousands_separator":"."
+                    },
+                    "bank":{
+                       "rounding_method":null,
+                       "rates":{
+
+                       },
+                       "mutex":{
+
+                       }
+                    }
+                 }
+              },
+              {
+                 "card_type":"visa",
+                 "description":"CONS. $  ",
+                 "value":{
+                    "fractional":"17100.0",
+                    "currency":{
+                       "id":"ars",
+                       "alternate_symbols":[
+                          "$m/n",
+                          "m$n"
+                       ],
+                       "decimal_mark":",",
+                       "disambiguate_symbol":"$m/n",
+                       "html_entity":"\u0026#x20B1;",
+                       "iso_code":"ARS",
+                       "iso_numeric":"032",
+                       "name":"Argentine Peso",
+                       "priority":100,
+                       "smallest_denomination":1,
+                       "subunit":"Centavo",
+                       "subunit_to_unit":100,
+                       "symbol":"$",
+                       "symbol_first":true,
+                       "thousands_separator":"."
+                    },
+                    "bank":{
+                       "rounding_method":null,
+                       "rates":{
+
+                       },
+                       "mutex":{
+
+                       }
+                    }
+                 },
+                 "installment":"0",
+                 "shop_name":"Sucursal 1",
+                 "pay_date":"2015-11-19",
+                 "batch_number":"111",
+                 "card":"XXXX XXXX XXXX1111",
+                 "plan":"0",
+                 "amount_cents":17100,
+                 "voucher":"0001436 ",
+                 "date":"2015-10-22",
+                 "presentation_date":"2015-09-23",
+                 "total_amount":{
+                    "fractional":"17100.0",
+                    "currency":{
+                       "id":"ars",
+                       "alternate_symbols":[
+                          "$m/n",
+                          "m$n"
+                       ],
+                       "decimal_mark":",",
+                       "disambiguate_symbol":"$m/n",
+                       "html_entity":"\u0026#x20B1;",
+                       "iso_code":"ARS",
+                       "iso_numeric":"032",
+                       "name":"Argentine Peso",
+                       "priority":100,
+                       "smallest_denomination":1,
+                       "subunit":"Centavo",
+                       "subunit_to_unit":100,
+                       "symbol":"$",
+                       "symbol_first":true,
+                       "thousands_separator":"."
+                    },
+                    "bank":{
+                       "rounding_method":null,
+                       "rates":{
+
+                       },
+                       "mutex":{
+
+                       }
+                    }
+                 }
+              }
+           ],
+           "pages":15
+        }
+
+### Retrieve Operations [GET]
+
++ Request (application/json)
+
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200
+
+    [Operations Collection][]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+# Group Banks
+
+Bank endpoint with information about internal ids for Banks at Increase
+
+## List client's Banks [/banks]
+
+Returns the list of banks associated with current client's existing Clearings.
+
+### Retrieve [GET]
+
++ Request (application/json)
+
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 1,
+                "name": "BBVA"
+            },
+            {
+                "id": 2,
+                "name": "Otros"
+            }
+        ]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+# Group Taxes
+
+Taxes endpoint with information about different types of taxes driven out of Clearings
+
+## Taxes [/taxes.json{?daterange,card_type,bank_id}]
+
+Returns the list of banks associated with current client's existing Clearings.
+
+### taxes [GET]
+
++ Parameters
+    + daterange (optional, string, `20/11/2015 - 20/11/2015`)
+        Date range for clearings summary. The default is the current date
+    + card_type (optional, string, `mastercard`)
+        Card type as a search parameter
+    + bank_id (optional, string)
+        Bank id as a search parameter
+
++ Request (application/json)
+
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+
++ Response 200 (application/json)
+
+        {
+            "taxations": {
+                "iva": {
+                  "10,50": 998133,
+                  "21,00": 1338517
+                },
+                "others": 0
+            },
+            "perceptions": {
+                "iva": 49852,
+                "earnings": 0,
+                "gross_income": {
+
+                },
+                "others": 0
+            },
+            "withholdings": {
+                "iva": 4922168,
+                "earnings": 1903865,
+                "gross_income": {
+                    "C.A.B.A.": 3392539,
+                    "Buenos Aires": 987563
+                },
+                "others": 0
+            }
+        }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
