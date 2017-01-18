@@ -535,9 +535,9 @@ Retrieves the summary of the selected stablishment.
               "year": 2016,
               "number": "12345678",
               "pdf_link": "https://s3.example.com/file/1.pdf",
-              "total_presented": 12345,
+              "total_amount": 12345,
+              "total_deduction": 12345,
               "total_earn": 12345,
-              "total_discount": 12345,
               "presented_details":
               {
                 "debit": 12345,
@@ -546,25 +546,25 @@ Retrieves the summary of the selected stablishment.
                 "chargebacks": 1233
               },
               "discounts": {
-                "financialcost": 123,
-                "other": 123,
-                "selldiscounts": 12345,
+                "financial_cost": 123,
+                "additional_service": 123,
+                "sell_discount": 12345,
                 "arancel": 12345,
-                "taxes": [
+                "taxation": [
                   {
                     "category": "iva",
                     "subcategory": "10,50",
                     "amount_cents": 123
                   }
                 ],
-                "withholdings": [
+                "withholding": [
                   {
                     "category": "IIBB",
                     "subcategory": "Buenos Aires",
                     "amount_cents": 123
                   }
                 ],
-                "perceptions": [
+                "perception": [
                   {
                     "category": "IVA",
                     "subcategory": "",
@@ -636,6 +636,7 @@ Returns the Clearing of the current client.
         {
           "clearings": [
             {
+              "id": 633291
               "report_date": "2016-07-26",
               "payment_date": "2016-07-27",
               "clearing_number": "000000008429",
@@ -667,6 +668,7 @@ Returns the Clearing of the current client.
               "credit_card_provider": "visa",
               "transactions": [
                 {
+                  "id": 1234,
                   "card_type": "visa",
                   "description": "3 Ventas en    3 pag. Plan Cuotas",
                   "value": {
@@ -745,6 +747,7 @@ Returns the Clearing of the current client.
                   "clearing_table_id": 633291
                 },
                 {
+                  "id": 1234,
                   "card_type": "visa",
                   "description": "5 Ventas en    3 pag. Plan Cuotas",
                   "value": {
@@ -823,6 +826,7 @@ Returns the Clearing of the current client.
                   "clearing_table_id": 633291
                 },
                 {
+                  "id": 1234,
                   "card_type": "visa",
                   "description": "1 Venta en    2 pag. Plan Cuotas",
                   "value": {
@@ -901,6 +905,7 @@ Returns the Clearing of the current client.
                   "clearing_table_id": 633291
                 },
                 {
+                  "id": 1234,
                   "card_type": "visa",
                   "description": "11 Ventas en    3 pag. Plan Cuotas",
                   "value": {
@@ -979,6 +984,7 @@ Returns the Clearing of the current client.
                   "clearing_table_id": 633291
                 },
                 {
+                  "id": 1234,
                   "card_type": "visa",
                   "description": "3 Ventas Tj.D bito",
                   "value": {
@@ -1057,6 +1063,7 @@ Returns the Clearing of the current client.
                   "clearing_table_id": 633291
                 },
                 {
+                  "id": 1234,
                   "card_type": "visa",
                   "description": "3 Ventas Tj.D bito",
                   "value": {
@@ -1135,6 +1142,7 @@ Returns the Clearing of the current client.
                   "clearing_table_id": 633291
                 },
                 {
+                  "id": 1234,
                   "card_type": "visa",
                   "description": "5 Ventas Tj.D bito",
                   "value": {
@@ -1564,6 +1572,7 @@ Retrieves all the different Clearings card types for the current client.
            "total":1511988.97,
            "operations":[
               {
+                 "id": 1234,
                  "card_type":"visa",
                  "description":"CONS. $  ",
                  "value":{
@@ -1639,9 +1648,11 @@ Retrieves all the different Clearings card types for the current client.
 
                        }
                     }
-                 }
+                 },
+                 "clearing_table_id": 12345
               },
               {
+                 "id": 1234,
                  "card_type":"visa",
                  "description":"CONS. $  ",
                  "value":{
@@ -1717,9 +1728,11 @@ Retrieves all the different Clearings card types for the current client.
 
                        }
                     }
-                 }
+                 },
+                 "clearing_table_id": 12345
               },
               {
+                 "id": 1234,
                  "card_type":"visa",
                  "description":"CONS. $  ",
                  "value":{
@@ -1795,9 +1808,11 @@ Retrieves all the different Clearings card types for the current client.
 
                        }
                     }
-                 }
+                 },
+                 "clearing_table_id": 12345
               },
               {
+                 "id": 1234,
                  "card_type":"visa",
                  "description":"CONS. $  ",
                  "value":{
@@ -1873,7 +1888,8 @@ Retrieves all the different Clearings card types for the current client.
 
                        }
                     }
-                 }
+                 },
+                 "clearing_table_id": 12345
               }
            ],
            "pages":15
