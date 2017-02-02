@@ -4,7 +4,7 @@ Increasecard API
 
 Esta es la API JSON que ofrece Increasecard.
 
-Para ver y navegar la documentación, por favor visite [api-docs.increasecard.com](api-docs.increasecard.com)
+Para ver y navegar la documentación, por favor visite [api-docs.increasecard.com](http://api-docs.increasecard.com)
 
 Registro de cambios
 ===================
