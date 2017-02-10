@@ -2028,3 +2028,102 @@ Returns the list of banks associated with current client's existing Clearings.
 + Response 401 (application/json)
 
         {   "error": "Not Authorized"   }
+
+# Group Reconciliation
+
+Resources to complete the reconciliation flow. The idea of this process is to upload a file with your transactions to match them against our system.
+
+    This flow constists of the following steps:
+
+    1) The files you upload with the transactions must be formed according to a structure. An administrator has to be requested to generate the structure in our system for you.
+
+    2) Request our API an upload link, where you will upload your reconciliation file.
+
+    3) Upload your file to the upload link, using a multipart/form-data with the parameters returned in step 2 and the file.
+
+    4) Notify our API that the upload was made, so that the file can be processed.
+
+    5) The report should be available in a few minutes in the reports tab, you can fetch it like any other report.
+
+## Upload Link [/files/upload_link.json{?file_type}]
+
+Retrieves the link to request the reconciliation file upload
+
+### files/upload_link [GET]
+
++ Parameters
+
+    + file_type (string, `reconciliation`)
+        File type from which an upload is requested
+
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+        {
+            "base_url": "https://scrapper-production.s3.amazonaws.com/",
+            "AWSAccessKeyId": "access_key",
+            "key": "reconciliations/123123/2017-02-10T17:12:56-03:00",
+            "policy": "policy",
+            "signature": "signature",
+            "Content-Type": "multipart/form-data"
+        }
+
+##  Notify upload [/reconciliations/notify{?reconciliations}]
+
+Notifies API that a reconciliation file was uploaded, so that it can be processed.
+
+### reconciliations/notify [POST]
+
++ Parameters
+
+    + reconciliations
+        + key (string, `reconciliations/123123/2017-02-10T17:12:56-03:00`)
+            The key returned in the response of /files/upload_link
+        + filename (string, `reconciliation_file_name.csv`)
+            The name of the file uploaded
+        + structure_name (string, `structure_name`)
+            The name of the reconciliation structure to use
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+# Group Reports
+
+Resources to fetch the links to download the reports created in our system.
+
+## Download link [/reports/id/download_link.json{?id}]
+
+Link to request the download of reports.
+
+### reports/id/download_link [GET]
+
++ Parameters
+
+    + id (integer, `16765`)
+        The id of the report that you want to download
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+        {
+            "download_link": "link"
+        }
