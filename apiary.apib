@@ -607,7 +607,7 @@ Retrieves the summary of the selected stablishment.
 
 Clearing endpoints with different information about the current client Clearings.
 
-## Index [/clearings{?page,daterange,shop_id,stablishment_number}]
+## Index [/clearings{?page,daterange,shop_id,stablishment_id,stablishment_number}]
 
 Returns the Clearing of the current client.
 
@@ -619,6 +619,8 @@ Returns the Clearing of the current client.
         Filter by date range.
     + shop_id (optional, string)
         Filter by shop id
+    + stablishment_id (optional, string)
+        Filter by stablishment id
     + stablishment_number (optional, string, `123456789`)
         Filter by stablishment number
 
@@ -1547,7 +1549,9 @@ Retrieves all the different Clearings card types for the current client.
 
 # Group Operations
 
-## Operations Collection [/operations{?page,daterange,shop_id,direction,by_pay_date,card_type,column}]
+## Operations Collection [/operations{?page,daterange,shop_id,stablishment_id,priority,created_at_to,created_at_from,direction,by_pay_date,card_type,column}]
+
+created_at_to - created_at_from ranges are restricted to intervals of 14 days or less
 
 + Parameters
     + page (optional, integer)
@@ -1557,6 +1561,14 @@ Retrieves all the different Clearings card types for the current client.
         Filter by date range.
     + shop_id (optional, string)
         Filter by shop id
+    + stablishment_id (optional, string)
+        Filter by stablishment id
+    + priority (optional, integer)
+        Filter by priority
+    + created_at_from (optional, date, `2017-01-01T12:00:00+01:00`)
+        Filter operations with date greater than or equal to created_at_from, note that it should be iso8601 compliant
+    + created_at_to (optional, date, `2017-01-01T12:00:00+01:00`)
+        Filter operations with date less than or equal to created_at_to, note that it should be iso8601 compliant
     + direction (string, `asc`)
         Order direction. Options: asc, desc
     + by_pay_date (string, optional)
