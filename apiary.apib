@@ -1566,9 +1566,9 @@ created_at_to - created_at_from ranges are restricted to intervals of 14 days or
     + priority (optional, integer)
         Filter by priority
     + created_at_from (optional, date, `2017-01-01T12:00:00+01:00`)
-        Filter operations with date greater than or equal to created_at_from
+        Filter operations with date greater than or equal to created_at_from, note that it should be iso8601 compliant
     + created_at_to (optional, date, `2017-01-01T12:00:00+01:00`)
-        Filter operations with date less than or equal to created_at_from
+        Filter operations with date less than or equal to created_at_to, note that it should be iso8601 compliant
     + direction (string, `asc`)
         Order direction. Options: asc, desc
     + by_pay_date (string, optional)
