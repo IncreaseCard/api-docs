@@ -535,6 +535,8 @@ Retrieves the summary of the selected stablishment.
               "year": 2016,
               "number": "12345678",
               "pdf_link": "https://s3.example.com/file/1.pdf",
+              "opening_balance": 0.0,
+              "closing_balance": 0.0,
               "total_amount": 12345,
               "total_deduction": 12345,
               "total_earn": 12345,
@@ -667,6 +669,14 @@ Returns the Clearing of the current client.
               "total_earn": {
                 "currency": "ARS",
                 "amount": 5064471
+              },
+              "opening_balance": {
+                "currency": "ARS",
+                "amount": 0
+              },
+              "closing_balance": {
+                "currency": "ARS",
+                "amount": 0
               },
               "credit_card_provider": "visa",
               "transactions": [
@@ -1348,6 +1358,8 @@ Returns the Clearings totals values for the current client.
 
         {
             "total_chargebacks": 2072.0,
+            "opening_balance": 0.0,
+            "closing_balance": 0.0,
             "total_amount": 850259.74,
             "total_deduction": 132080.26,
             "total_earn": 718179.48
@@ -1385,6 +1397,8 @@ The **next working day** is calculated in the API.
 + Response 200 (application/json)
 
         {
+            "opening_balance": 0.0,
+            "closing_balance": 0.0,
             "total_amount": 184138.82,
             "total_deduction": 23938.6,
             "total_earn": 160200.22,
