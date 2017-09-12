@@ -121,25 +121,25 @@ Despite the `refresh_token` endpoint, the server always unauthorizes a Client af
                 "refresh_id": "GWERGWER456456456"
             }
 
-+ Response 200
++ Response 200 (application/json)
 
             {
                 "access_token": "fwewwefWEFOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ"
             }
 
-+ Response 403
++ Response 403 (application/json)
 
             {
                 "error": "Warning expiration date has not been reached"
             }
 
-+ Response 401
++ Response 401 (application/json)
 
             {
                 "error": "Invalid refresh_id"
             }
 
-+ Response 401
++ Response 401 (application/json)
 
             {
                 "error": "Access token is not valid anymore"
@@ -166,13 +166,13 @@ Unauthorizes all active Clients.
 
             }
 
-+ Response 200
++ Response 200 (application/json)
 
             {
 
             }
 
-+ Response 500
++ Response 500 (application/json)
 
             {
                 "error": "Error invalidating all tokens"
@@ -205,7 +205,7 @@ Unauthorizes all active Clients.
 
 
 
-+ Response 401
++ Response 401 (application/json)
 
         {   "error": "Not Authorized"   }
 
@@ -250,7 +250,7 @@ Returns a specific Credential. The current client must be the owner of the crede
             Accept: application/json
             Authorization: un_authorized_token
 
-+ Response 401
++ Response 401 (application/json)
 
         {   "errors": "Client can't authorized to update credential"    }
 
@@ -272,7 +272,7 @@ After the password is changed, the Client with be unauthorized.
                 "password_confirmation": "new_password"
             }
 
-+ Response 200  (application/json)
++ Response 200 (application/json)
 
         {}
 
@@ -283,7 +283,7 @@ After the password is changed, the Client with be unauthorized.
             Accept: application/json
             Authorization: un_authorized_token
 
-+ Response 401  (application/json)
++ Response 401 (application/json)
 
         {   error: "Client can't authorized to update credential"   }
 
@@ -300,14 +300,120 @@ After the password is changed, the Client with be unauthorized.
                 "password_confirmation": "new_password_different"
             }
 
-+ Response 421  (application/json)
++ Response 403 (application/json)
 
         {   error: "Password and password confirmation don\'t match"    }
 
 
-+ Response 500  (application/json)
++ Response 500 (application/json)
 
         {   error: "Error updating password"    }
+
+### Delete a Credential [DELETE]
+Deletes a new credential. The current client must be an account administrator and own the credential with the given id.
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+        {}
+
++ Response 403 (application/json)
+
+        {   errors: ["Action forbidden"]    }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: un_authorized_token
+
++ Response 401 (application/json)
+
+        {   error: "Not authorized"   }
+
+
+
+### Create a Credential [POST /clients/credentials]
+Creates a new credential. The current client must be an account administrator.
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+    + Body
+
+            {
+                "login": "12345667",
+                "password": "new_password",
+                "provider": "visa"
+            }
+
++ Response 200 (application/json)
+
+        {
+            "id": 1,
+            "login": "12345667",
+            "status": "ok",
+            "provider": "visa",
+            "electronic": false,
+            "stablishments": [
+                {
+                    "id": 1,
+                    "number": "12345667",
+                    "shop": null,
+                    "provider": "visa"
+                }
+            ]
+        }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: un_authorized_token
+
++ Response 401 (application/json)
+
+        {   error: "Not authorized"   }
+
++ Request (application/json)
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+    + Body
+
+            {
+                "id": 1,
+                "login": "12345667",
+                "status": "ok",
+                "provider": "visa",
+                "electronic": false,
+                "stablishments": [
+                    {
+                        "id": 1,
+                        "number": "12345667",
+                        "shop": null,
+                        "provider": "visa"
+                    }
+                ]
+            }
+
++ Response 403 (application/json)
+
+        {   errors: ["Action forbidden"]    }
 
 ## Credentials Collection [/clients/credentials{?login,page,invalid_login}]
 
@@ -378,6 +484,8 @@ After the password is changed, the Client with be unauthorized.
 
 A Shop resource.
 
+## Shop [/shops/{id}]
+
 ## Shops Collection [/shops]
 
 + Model (application/json)
@@ -411,6 +519,151 @@ A Shop resource.
                 ]
             }
         ]
+
+### Create a Shop [POST]
+
+Creates a new shop. The user must be an account administrator
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+    + Body
+
+            {
+                "name": "My Shop",
+                "stablishments": [
+                        {
+                                "number": "12345667",
+                                "credential": {
+                                        "provider": "visa"
+                                        "login": "12345667",
+                                        "password": "my_password"
+                                }
+                        },
+                        {
+                                "number": "912304413",
+                                "credential": {
+                                        "provider": "amex"
+                                        "login": "myshop01",
+                                        "password": "my_password"
+                                }
+                        }
+                ]
+            }
++ Response 200 (application/json)
+
+        {
+            "id": 1,
+            "name": "My Shop",
+            "stablishments": [
+                        {
+                                "id": 1
+                                "provider": "visa"
+                                "number": "12345667"
+                        },
+                        {
+                                "id": 2
+                                "provider": "amex"
+                                "number": "912304413"
+                        }
+                ]
+        }
+
++ Response 400 (application/json)
+
+        { "errors": [{"stablishments[0].credential.login": "credential already exists"}] }
+
++ Response 403 (application/json)
+
+        { "errors": ["Action forbidden"] }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: un_authorized_token
+
++ Response 401 (application/json)
+
+        {   error: "Not authorized"   }
+
+
+### Update a Shop [PATCH]
+
+Updates a shop. May change name or stablishments associated
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+    + Body
+
+            "shop": {
+                "name": "My Shop Renamed"
+            }
+
++ Response 200 (application/json)
+
+        {
+            "id": 1,
+            "name": "My Shop Renamed",
+            "stablishments": [
+                {
+                    "id": 1
+                    "provider": "visa"
+                    "number": "12345667"
+                },
+                {
+                    "id": 2
+                    "provider": "amex"
+                    "number": "912304413"
+                }
+            ]
+        }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
+    + Body
+
+            "stablishment_numbers": ["12345667"]
+
++ Response 200 (application/json)
+
+        {
+            "id": 1,
+            "name": "My Shop",
+            "stablishments": [
+                {
+                    "id": 1
+                    "provider": "visa"
+                    "number": "12345667"
+                }
+            ]
+        }
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: un_authorized_token
+
++ Response 401 (application/json)
+
+        {   error: "Not authorized"   }
+
 
 ### Retrieve Shops [GET]
 
@@ -464,7 +717,7 @@ Retrieves the Stablishments of the current client.
             Accept: application/json
             Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
 
-+ Response 200
++ Response 200 (application/json)
 
         {
             "stablishments": [
@@ -528,7 +781,7 @@ Retrieves the summary of the selected stablishment.
                 "daterange": "09/2015"
             }
 
-+ Response 200
++ Response 200 (application/json)
 
         {
               "month": 8,
@@ -2009,12 +2262,10 @@ Returns the list of banks associated with current client's existing Clearings.
 
 + Request (application/json)
 
-
     + Header
 
             Accept: application/json
             Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
-
 
 + Response 200 (application/json)
 
