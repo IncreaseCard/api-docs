@@ -609,7 +609,7 @@ Retrieves the summary of the selected stablishment.
 
 Clearing endpoints with different information about the current client Clearings.
 
-## Index [/clearings{?page,daterange,shop_id,stablishment_id,stablishment_number}]
+## Index [/clearings{?page,daterange,shop_id,stablishment_id,stablishment_number,created_at_from,created_at_to}]
 
 Returns the Clearing of the current client.
 
@@ -625,6 +625,10 @@ Returns the Clearing of the current client.
         Filter by stablishment id
     + stablishment_number (optional, string, `123456789`)
         Filter by stablishment number
+    + created_at_from (optional, date, `2017-01-01T12:00:00+01:00`)
+        Filter clearings with date greater than or equal to created_at_from, note that it should be iso8601 compliant
+    + created_at_to (optional, date, `2017-01-01T12:00:00+01:00`)
+        Filter clearings with date less than or equal to created_at_to, note that it should be iso8601 compliant
 
 ### Index [GET]
 
@@ -1564,8 +1568,6 @@ Retrieves all the different Clearings card types for the current client.
 # Group Operations
 
 ## Operations Collection [/operations{?page,daterange,shop_id,stablishment_id,priority,created_at_to,created_at_from,direction,by_pay_date,card_type,column}]
-
-created_at_to - created_at_from ranges are restricted to intervals of 14 days or less
 
 + Parameters
     + page (optional, integer)
