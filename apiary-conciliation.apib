@@ -1,0 +1,615 @@
+FORMAT: 1A
+
+HOST: https://api.increaseconciliation.com/api/v1
+
+# IncreaseConciliation Public API
+
+Public API for Increase Conciliation services
+
+# Group Reports
+
+Resources to fetch the links to download the reports created in our system.
+
+## Index [/reports]
+
+Returns the reports of the current client.
+
+### Reports [GET]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+        [
+          {
+            "id": 17868,
+            "name": "name",
+            "creation_date": "2017-02-13",
+            "conciliation_results": {
+              "processed_lines": 100,
+              "scannings": [
+                { "scanning_number": 0, "reconcilied_lines": 10 },
+                { "scanning_number": 1, "reconcilied_lines": 50 },
+                { "scanning_number": 2, "reconcilied_lines": 20 }
+              ]
+            },
+            "last_download_at": null
+          },
+          {
+            "id": 17869,
+            "name": "name",
+            "creation_date": "2017-02-13",
+            "conciliation_results": {
+              "processed_lines": 140,
+              "scannings": [
+                { "scanning_number": 0, "reconcilied_lines": 10 },
+                { "scanning_number": 1, "reconcilied_lines": 0 },
+                { "scanning_number": 2, "reconcilied_lines": 20 }
+              ]
+            },
+            "last_download_at": null
+          }
+        ]
+
+## Download link [/reports/{id}/download_link]
+
+Link to request the download of reports.
+
+### reports/id/download_link [GET]
+
++ Parameters
+
+    + id (number, `16765`)
+        The id of the report that you want to download
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+        {
+            "download_link": "link"
+        }
+
+## Notify Download [/reports/{id}/notify_download]
+
+Link to notify the download of reports.
+
+### reports/id/notify_download [POST]
+
++ Parameters
+
+    + id (number, `16765`)
+        The id of the report that you downloaded
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+# Group IncreaseCard Transactions
+
+Resources to operate with transactions coming from IncreaseCard.
+
+## Transactions Collection [/increase_transactions{?page,daterange,shop_id,direction,by_pay_date,card_type,column}]
+
++ Parameters
+    + page (optional, number)
+        Page number to get
+        + Default: 1
+    + daterange (optional, string, `29/05/2015 - 29/05/2015`)
+        Filter by date range.
+    + shop_id (optional, string)
+        Filter by shop id
+    + direction (string, `asc`)
+        Order direction. Options: asc, desc
+    + by_pay_date (string, optional)
+        Filter by pay date or by origin date.
+        + Default: `false`
+    + card_type (optional, string, `visa`)
+        Name of card to filter by
+    + column (optional, string, `pay_date`)
+        Name of column to order by
+    + show_all (optional, boolean)
+        Show all transactions and not only the pending ones
+        + Default: `false`
+
++ Model (application/json)
+
+        {
+           "total_pending":1511988.97,
+           "operations":[
+              {
+                 "id": 1234,
+                 "card_type":"visa",
+                 "description":"CONS. $  ",
+                 "value":{
+                    "fractional":"11000.0",
+                    "currency":{
+                       "id":"ars",
+                       "alternate_symbols":[
+                          "$m/n",
+                          "m$n"
+                       ],
+                       "decimal_mark":",",
+                       "disambiguate_symbol":"$m/n",
+                       "html_entity":"\u0026#x20B1;",
+                       "iso_code":"ARS",
+                       "iso_numeric":"032",
+                       "name":"Argentine Peso",
+                       "priority":100,
+                       "smallest_denomination":1,
+                       "subunit":"Centavo",
+                       "subunit_to_unit":100,
+                       "symbol":"$",
+                       "symbol_first":true,
+                       "thousands_separator":"."
+                    },
+                    "bank":{
+                       "rounding_method":null,
+                       "rates":{
+
+                       },
+                       "mutex":{
+
+                       }
+                    }
+                 },
+                 "installment":"0",
+                 "shop_name":"Sucursal 1",
+                 "pay_date":"2015-10-27",
+                 "batch_number":"97",
+                 "card":"XXXX XXXX XXXX1111",
+                 "plan":"0",
+                 "amount_cents":11000,
+                 "voucher":"0001435 ",
+                 "date":"2015-10-22",
+                 "presentation_date":"2015-09-23",
+                 "total_amount":{
+                    "fractional":"11000.0",
+                    "currency":{
+                       "id":"ars",
+                       "alternate_symbols":[
+                          "$m/n",
+                          "m$n"
+                       ],
+                       "decimal_mark":",",
+                       "disambiguate_symbol":"$m/n",
+                       "html_entity":"\u0026#x20B1;",
+                       "iso_code":"ARS",
+                       "iso_numeric":"032",
+                       "name":"Argentine Peso",
+                       "priority":100,
+                       "smallest_denomination":1,
+                       "subunit":"Centavo",
+                       "subunit_to_unit":100,
+                       "symbol":"$",
+                       "symbol_first":true,
+                       "thousands_separator":"."
+                    },
+                    "bank":{
+                       "rounding_method":null,
+                       "rates":{
+
+                       },
+                       "mutex":{
+
+                       }
+                    }
+                 },
+                 "clearing_table_id": 12345
+              },
+           ],
+           "pages":15
+        }
+
+
+### Retrieve IncreaseCard Transactions [GET]
+
++ Request (application/json)
+
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200
+
+    [Transactions Collection][]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+
+## Conciliate [/increase_transactions/conciliate{?ids}]
+
++ Parameters
+  + ids (array[number])
+    IDs of transactions to conciliate
+
+### Conciliate Transactions [POST]
+
++ Request (application/json)
+
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+# Group Reconciliations
+
+Resources to start reconciliations.
+
+## Notify [/reconciliations/notify{?reconciliations}]
+
+Notifies API that a reconciliation file was uploaded, so that it can be processed.
+
+### reconciliations/notify [POST]
+
++ Parameters
+
+    + reconciliations
+        + key (string, `reconciliations/123123/2017-02-10T17:12:56-03:00`)
+            The key returned in the response of /files/upload_link
+        + filename (string, `reconciliation_file_name.csv`)
+            The name of the file uploaded
+        + reconciliation_profile_name (string, `reconciliation_profile_name`)
+            The name of the reconciliation profile to use
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+# Group Increase Data
+
+Resources to fetch the data coming from IncreaseCard.
+
+## Retrieve Increase Data [/increase_data]
+
+### /increase_data [GET]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+        {
+            "increase_cards": ["visa", "amex"],
+            "increase_shops": [{ "id": 1, "name": "Alto Palermo" }]
+        }
+
+# Group Files
+
+Resources to manage file uploading to s3
+
+## Upload Link [/upload_link]
+
+### /upload_link [GET]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+    {
+        "base_url": "https://scrapper-production.s3.amazonaws.com/",
+        "AWSAccessKeyId": "access_key",
+        "key": "reconciliations/123123/2017-02-10T17:12:56-03:00",
+        "policy": "policy",
+        "signature": "signature",
+        "Content-Type": "multipart/form-data"
+    }
+
+# Group File Structures
+
+## Structures Metadata [/file_structures/structures_metadata]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+        {
+            "common_separators": [",", ";", "\t", "|"],
+            "increasecard_fields": ["provider", "amount_cents", "origin_date", "pay_date"],
+            "increasecard_providers": ["amex", "visa", "mastercard", "cabal", "naranja"],
+            "data_types": ["string", "date", "money", "card", "integer"],
+            "comparation_types": ["=", "range"],
+            "date_formats": ["dd/mm/yyyy", "mm-dd-yyyy", "yyyymmdd"]
+        }
+
+### /file_structures/structures_metadata [GET]
+
+## Validation [/file_structures/validate{?structure,file_key,field_matches}]
+
+### /file_structures/validate [POST]
+
++ Parameters
+
+    + file_key (string, `reconciliations/123123/2017-02-10T17:12:56-03:00`)
+        The key returned in the response of /files/upload_link
+    + structure
+        + headers_count (required, number, 1)
+        + delimiter (required, string, 1)
+    + field_matches (required, array)
+        + position (required, number)
+        + type (required, string)
+        + cents_separator (optional, string)
+        + date_format (optional, string)
+
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+    {
+        "valid": false,
+        "error_code": 1,
+        "error": {
+            "value": "asadas",
+            "position": 2,
+            "line": 12
+        }
+    }
+
+
+# Group Reconciliation Profiles
+
+Resources to manage the CRUD of Reconciliation Profiles
+
+## Reconciliation Profiles Collection [/reconciliation_profiles]
+
+### Retrieve Profiles [GET]
+
++ Request (application/json)
+
+    + Header
+
+        Accept: application/json
+        Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+    [{
+        "id": 17868,
+        "name": "name",
+        "file_structures": [
+            {
+                "id": 1,
+                "headers_count": 2,
+                "delimiter": ","
+            }
+        ],
+        "field_matches": [
+            {
+                "id": 1,
+                "name": "Monto",
+                "cents_separator": ".",
+                "date_format": null,
+                "type": "money",
+                "position": 10,
+                "comparators": null
+            },
+            {
+                "id": 2,
+                "name": "Fecha de Venta",
+                "cents_separator": null,
+                "date_format": "dd/mm/yyyy",
+                "type": "date",
+                "position": 11,
+                "comparators": null
+            }
+        ],
+        "scannings": [
+            {
+                "number": 1,
+                "scanning_fields": [
+                    {
+                        "field_a": 1,
+                        "field_b": 2,
+                        "comparation_type": "=",
+                        "threshold": null
+                    }
+                ]
+            }
+        ]
+    }]
+
+### Create Profile [POST]
+
++ Parameters
+
+    + reconciliation_profile
+        + name (required, string)
+        + file_structure
+            + delimiter (required, string)
+            + headers_count (required, number)
+        + field_matches(required, array)
+            + name (required, string)
+            + position (required, number)
+            + type (required, string)
+            + comparators (optional, array)
+                + original_value (required, string)
+                + possible_values (required, array[string])
+            + cents_separator (optional, string)
+            + date_format (optional, string)
+        + scannings (required, array)
+            + number (required, number)
+            + scanning_fields
+                + field_a (required, number)
+                + field_b (required, number)
+                + comparation_type (required, string)
+                + threshold (optional, number)
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 201 (application/json)
+
+
+## Reconciliation Profile actions [/reconciliation_profiles/:id]
+
+### Show Profile [GET]
+
++ Parameters
+
+    + id (number, `16765`)
+        The id of the profile
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+    {
+        "id": 17868,
+        "name": "name",
+        "file_structures": [
+            {
+                "id": 1,
+                "headers_count": 2,
+                "delimiter": ","
+            }
+        ],
+        "field_matches": [
+            {
+                "id": 1,
+                "name": "Monto",
+                "cents_separator": ".",
+                "date_format": null,
+                "type": "money",
+                "position": 10,
+                "comparators": null
+            },
+            {
+                "id": 2,
+                "name": "Fecha de Venta",
+                "cents_separator": null,
+                "date_format": "dd/mm/yyyy",
+                "type": "date",
+                "position": 11,
+                "comparators": null
+            }
+        ],
+        "scannings": [
+            {
+                "number": 1,
+                "scanning_fields": [
+                    {
+                        "field_a": 1,
+                        "field_b": 2,
+                        "comparation_type": "=",
+                        "threshold": null
+                    }
+                ]
+            }
+        ]
+    }
+
+### Update Profile [PATCH]
+
++ Parameters
+
+    + reconciliation_profile
+        + id (required, number)
+        + scannings (required, array)
+            + id (required, number)
+            + number (required, number)
+            + scanning_fields
+                + id (required, number)
+                + field_a (required, number)
+                + field_b (required, number)
+                + comparation_type (required, string)
+                + threshold (optional, number)
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
+
+
+### Destroy Profile [DELETE]
+
++ Parameters
+
+    + id (number, `16765`)
+        The id of the profile
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200 (application/json)
