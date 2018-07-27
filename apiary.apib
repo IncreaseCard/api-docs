@@ -209,6 +209,82 @@ Unauthorizes all active Clients.
 
         {   "error": "Not Authorized"   }
 
+
+# Group One Login
+
+Endpoints for Partners in order to authenticate their clients.
+The process starts with a POST request that retrieves a random message.
+The random message has an expiration time of 5 minutes.
+After hashing that random message, another POST request is necessary to validate the process
+in order to retrieve a valid token for the user.
+
+## StartHandshake [/login/start_handshake]
+
+### Get a random message [POST]
+Returns a random message. The application must have the client's permissions to access it's data.
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+
+    + Body
+
+            {
+                "client_id": "123",
+                "app_id": "123"
+            }
+
++ Response 200
+
+        { "message"=>"random_code", "expiration_time"=> 1532722077 }
+
++ Response 400
+
+        { "error" => { "message" => "Missing params", "code"=>1 } }
+
++ Response 403
+
+        { "error"=>{ "message"=>"Invalid application or client id", "code"=>2 } }
+
+
+## ConfirmHandshake [/login/confirm_handshake]
+
+### Get a token [POST]
+With the random message from the previous step, the user needs to hash it the SECRET_KEY provided by Increase.
+
+The hashing process must use HMAC and Sha-256 to generate the needed hash.
+Also its necessary to use the hexidigest method.
+
+For example using Ruby language:
+
+hash_value = OpenSSL::HMAC.hexdigest('SHA256', SECRET_KEY, exchanged_message_from_step_one)
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+
+    + Body
+
+            {
+                "client_id": "123",
+                "app_id": "123",
+                "message": "code",
+                "hash": "hash_value"
+            }
+
++ Response 200
+
+        { "access_token": "TOKEN", "refresh_id": "REFRESH_ID" }
+
++ Response 401
+
+        { "error": {"message": "Some params are not valid", "code": 4 } }
+        { "error": {"message": "Invalid application or client id", "code": 2} }
+
 # Group Credentials
 
 A Credential resource contains information about a credit card provider with a given login and password.
