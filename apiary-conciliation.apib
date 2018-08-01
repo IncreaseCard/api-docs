@@ -30,6 +30,8 @@ Returns the reports of the current client.
             "id": 17868,
             "name": "name",
             "creation_date": "2017-02-13",
+            "status": 1,
+            "error_code": null,
             "conciliation_results": {
               "processed_lines": 100,
               "scannings": [
@@ -43,6 +45,8 @@ Returns the reports of the current client.
           {
             "id": 17869,
             "name": "name",
+            "status": 2,
+            "error_code": 2,
             "creation_date": "2017-02-13",
             "conciliation_results": {
               "processed_lines": 140,
@@ -104,7 +108,7 @@ Link to notify the download of reports.
 
 Resources to operate with transactions coming from IncreaseCard.
 
-## Transactions Collection [/increase_transactions{?page,daterange,shop_id,direction,by_pay_date,card_type,column}]
+## Transactions Collection [/increase_transactions{?page,daterange,shop_id,direction,by_pay_date,card_type,column,show_all}]
 
 + Parameters
     + page (optional, number)
@@ -340,18 +344,20 @@ Resources to manage file uploading to s3
 
 + Response 200 (application/json)
 
-    {
-        "base_url": "https://scrapper-production.s3.amazonaws.com/",
-        "AWSAccessKeyId": "access_key",
-        "key": "reconciliations/123123/2017-02-10T17:12:56-03:00",
-        "policy": "policy",
-        "signature": "signature",
-        "Content-Type": "multipart/form-data"
-    }
+        {
+            "base_url": "https://scrapper-production.s3.amazonaws.com/",
+            "AWSAccessKeyId": "access_key",
+            "key": "reconciliations/123123/2017-02-10T17:12:56-03:00",
+            "policy": "policy",
+            "signature": "signature",
+            "Content-Type": "multipart/form-data"
+        }
 
 # Group File Structures
 
 ## Structures Metadata [/file_structures/structures_metadata]
+
+### /file_structures/structures_metadata [GET]
 
 + Request (application/json)
 
@@ -363,15 +369,13 @@ Resources to manage file uploading to s3
 + Response 200 (application/json)
 
         {
-            "common_separators": [",", ";", "\t", "|"],
-            "increasecard_fields": ["provider", "amount_cents", "origin_date", "pay_date"],
-            "increasecard_providers": ["amex", "visa", "mastercard", "cabal", "naranja"],
-            "data_types": ["string", "date", "money", "card", "integer"],
-            "comparation_types": ["=", "range"],
-            "date_formats": ["dd/mm/yyyy", "mm-dd-yyyy", "yyyymmdd"]
+                "common_separators": [",", ";", "\t", "|"],
+                "increasecard_fields": ["provider", "amount_cents", "origin_date", "pay_date"],
+                "increasecard_providers": ["amex", "visa", "mastercard", "cabal", "naranja"],
+                "data_types": ["string", "date", "money", "card", "integer"],
+                "comparation_types": ["=", "range"],
+                "date_formats": ["dd/mm/yyyy", "mm-dd-yyyy", "yyyymmdd"]
         }
-
-### /file_structures/structures_metadata [GET]
 
 ## Validation [/file_structures/validate{?structure,file_key,field_matches}]
 
@@ -400,22 +404,22 @@ Resources to manage file uploading to s3
 
 + Response 200 (application/json)
 
-    {
-        "valid": false,
-        "error_code": 1,
-        "error": {
-            "value": "asadas",
-            "position": 2,
-            "line": 12
+        {
+                "valid": false,
+                "error_code": 1,
+                "error": {
+                        "value": "asadas",
+                        "position": 2,
+                        "line": 12
+                }
         }
-    }
 
 
 # Group Reconciliation Profiles
 
 Resources to manage the CRUD of Reconciliation Profiles
 
-## Reconciliation Profiles Collection [/reconciliation_profiles]
+## Reconciliation Profiles Collection [/reconciliation_profiles{?reconciliation_profile}]
 
 ### Retrieve Profiles [GET]
 
@@ -423,55 +427,55 @@ Resources to manage the CRUD of Reconciliation Profiles
 
     + Header
 
-        Accept: application/json
-        Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
 
 + Response 200 (application/json)
 
-    [{
-        "id": 17868,
-        "name": "name",
-        "file_structures": [
-            {
-                "id": 1,
-                "headers_count": 2,
-                "delimiter": ","
-            }
-        ],
-        "field_matches": [
-            {
-                "id": 1,
-                "name": "Monto",
-                "cents_separator": ".",
-                "date_format": null,
-                "type": "money",
-                "position": 10,
-                "comparators": null
-            },
-            {
-                "id": 2,
-                "name": "Fecha de Venta",
-                "cents_separator": null,
-                "date_format": "dd/mm/yyyy",
-                "type": "date",
-                "position": 11,
-                "comparators": null
-            }
-        ],
-        "scannings": [
-            {
-                "number": 1,
-                "scanning_fields": [
-                    {
-                        "field_a": 1,
-                        "field_b": 2,
-                        "comparation_type": "=",
-                        "threshold": null
-                    }
-                ]
-            }
-        ]
-    }]
+        [{
+            "id": 17868,
+            "name": "name",
+            "file_structures": [
+                {
+                    "id": 1,
+                    "headers_count": 2,
+                    "delimiter": ","
+                }
+            ],
+            "field_matches": [
+                {
+                    "id": 1,
+                    "name": "Monto",
+                    "cents_separator": ".",
+                    "date_format": null,
+                    "type": "money",
+                    "position": 10,
+                    "comparators": null
+                },
+                {
+                    "id": 2,
+                    "name": "Fecha de Venta",
+                    "cents_separator": null,
+                    "date_format": "dd/mm/yyyy",
+                    "type": "date",
+                    "position": 11,
+                    "comparators": null
+                }
+            ],
+            "scannings": [
+                {
+                    "number": 1,
+                    "scanning_fields": [
+                        {
+                            "field_a": 1,
+                            "field_b": 2,
+                            "comparation_type": "=",
+                            "threshold": null
+                        }
+                    ]
+                }
+            ]
+        }]
 
 ### Create Profile [POST]
 
@@ -509,7 +513,7 @@ Resources to manage the CRUD of Reconciliation Profiles
 + Response 201 (application/json)
 
 
-## Reconciliation Profile actions [/reconciliation_profiles/:id]
+## Reconciliation Profile actions [/reconciliation_profiles/{id}{?reconciliation_profile}]
 
 ### Show Profile [GET]
 
@@ -527,50 +531,50 @@ Resources to manage the CRUD of Reconciliation Profiles
 
 + Response 200 (application/json)
 
-    {
-        "id": 17868,
-        "name": "name",
-        "file_structures": [
-            {
-                "id": 1,
-                "headers_count": 2,
-                "delimiter": ","
-            }
-        ],
-        "field_matches": [
-            {
-                "id": 1,
-                "name": "Monto",
-                "cents_separator": ".",
-                "date_format": null,
-                "type": "money",
-                "position": 10,
-                "comparators": null
-            },
-            {
-                "id": 2,
-                "name": "Fecha de Venta",
-                "cents_separator": null,
-                "date_format": "dd/mm/yyyy",
-                "type": "date",
-                "position": 11,
-                "comparators": null
-            }
-        ],
-        "scannings": [
-            {
-                "number": 1,
-                "scanning_fields": [
+        {
+                "id": 17868,
+                "name": "name",
+                "file_structures": [
+                        {
+                                "id": 1,
+                                "headers_count": 2,
+                                "delimiter": ","
+                        }
+                ],
+                "field_matches": [
+                        {
+                                "id": 1,
+                                "name": "Monto",
+                                "cents_separator": ".",
+                                "date_format": null,
+                                "type": "money",
+                                "position": 10,
+                                "comparators": null
+                        },
+                        {
+                                "id": 2,
+                                "name": "Fecha de Venta",
+                                "cents_separator": null,
+                                "date_format": "dd/mm/yyyy",
+                                "type": "date",
+                                "position": 11,
+                                "comparators": null
+                        }
+                ],
+                "scannings": [
                     {
-                        "field_a": 1,
-                        "field_b": 2,
-                        "comparation_type": "=",
-                        "threshold": null
+                            "number": 1,
+                            "scanning_fields": [
+                                    {
+                                            "field_a": 1,
+                                            "field_b": 2,
+                                            "comparation_type": "=",
+                                            "threshold": null
+                                    }
+                            ]
                     }
                 ]
-            }
-        ]
-    }
+        }
 
 ### Update Profile [PATCH]
 
