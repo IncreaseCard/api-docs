@@ -115,11 +115,12 @@ Resources to operate with transactions coming from IncreaseCard.
         Page number to get
         + Default: 1
     + daterange (optional, string, `29/05/2015 - 29/05/2015`)
-        Filter by date range.
+        Filter by date range. Returns historical transactions if empty.
     + shop_id (optional, string)
         Filter by shop id
-    + direction (string, `asc`)
+    + direction (optional, string)
         Order direction. Options: asc, desc
+        + Default: `desc`
     + by_pay_date (string, optional)
         Filter by pay date or by origin date.
         + Default: `false`
@@ -141,36 +142,9 @@ Resources to operate with transactions coming from IncreaseCard.
                  "card_type":"visa",
                  "description":"CONS. $  ",
                  "value":{
-                    "fractional":"11000.0",
-                    "currency":{
-                       "id":"ars",
-                       "alternate_symbols":[
-                          "$m/n",
-                          "m$n"
-                       ],
-                       "decimal_mark":",",
-                       "disambiguate_symbol":"$m/n",
-                       "html_entity":"\u0026#x20B1;",
-                       "iso_code":"ARS",
-                       "iso_numeric":"032",
-                       "name":"Argentine Peso",
-                       "priority":100,
-                       "smallest_denomination":1,
-                       "subunit":"Centavo",
-                       "subunit_to_unit":100,
-                       "symbol":"$",
-                       "symbol_first":true,
-                       "thousands_separator":"."
-                    },
-                    "bank":{
-                       "rounding_method":null,
-                       "rates":{
-
-                       },
-                       "mutex":{
-
-                       }
-                    }
+                    "amount":"11000.00",
+                    "iso_code":"ARS",
+                    "symbol":"$",
                  },
                  "installment":"0",
                  "shop_name":"Sucursal 1",
@@ -183,36 +157,9 @@ Resources to operate with transactions coming from IncreaseCard.
                  "date":"2015-10-22",
                  "presentation_date":"2015-09-23",
                  "total_amount":{
-                    "fractional":"11000.0",
-                    "currency":{
-                       "id":"ars",
-                       "alternate_symbols":[
-                          "$m/n",
-                          "m$n"
-                       ],
-                       "decimal_mark":",",
-                       "disambiguate_symbol":"$m/n",
-                       "html_entity":"\u0026#x20B1;",
-                       "iso_code":"ARS",
-                       "iso_numeric":"032",
-                       "name":"Argentine Peso",
-                       "priority":100,
-                       "smallest_denomination":1,
-                       "subunit":"Centavo",
-                       "subunit_to_unit":100,
-                       "symbol":"$",
-                       "symbol_first":true,
-                       "thousands_separator":"."
-                    },
-                    "bank":{
-                       "rounding_method":null,
-                       "rates":{
-
-                       },
-                       "mutex":{
-
-                       }
-                    }
+                    "amount":"11000.00",
+                    "iso_code":"ARS",
+                    "symbol":"$",
                  },
                  "clearing_table_id": 12345
               },
