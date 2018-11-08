@@ -2137,6 +2137,499 @@ Returns the list of banks associated with current client's existing Clearings.
 + Response 401 (application/json)
 
         {   "error": "Not Authorized"   }
+        
+        
+
+# Group Chargebacks
+
+## Chargeback Collection [/chargebacks{?card_type,daterange,category,status,order_by_column,order_by_direction,page}] 
+
++ Parameters
+    + page (optional, integer)
+        Page number to get
+        + Default: 1
+    + limit (optional, integer)
+        Limit of record per page
+        + Default: 15
+    + daterange (optional, string, `29/05/2015 - 29/05/2015`)
+        Filter by chargeback debit date range.
+    + card_type (optional, string, `visa`)
+        Filter by name of card type
+    + not_types (optional,array)
+        Exclude by name of card types 
+    + status(optional, string)
+        Filter by chargeback status
+        <a href="https://increasecardapi1.docs.apiary.io/#reference/chargeback-status"> See more API chargeback status</a>
+    + shop_id (optional,integer)
+        Filter by shop id at Increase
+    + category (optional, integer)
+        Filter by chargeback category.
+        <a href="https://increasecardapi1.docs.apiary.io/#reference/chargeback-categories">See more API chargeback categories!</a>
+        Options:chargeback,promotion,'refund','rejection','adjustment'
+    + order_by_column (optional, string, `pay_date`)
+        Name of column to order by
+    + order_by_direction (string, `asc`)
+        Order direction. Options: asc, desc
+        
++ Model (application/json)
+
+{
+           "chargebacks": [
+       {
+            "id": 2259261,
+            "description": "91-AJUST900ROMOCION QUIERO",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 21200
+            },
+            "voucher": "00000000",
+            "shop_name": "Sucursal_ Dot",
+            "date": "2018-11-08",
+            "batch_number": null,
+            "authorization_code": null,
+            "type": "PRISMA",
+            "expiration_date": "2018-12-08",
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": null,
+            "card_number": "3216",
+            "transaction_date": "2018-10-10",
+            "presentation_date": null,
+            "category": "promotion",
+            "stablishment_number": "30188783",
+            "clearing_number": "00343247"
+        },
+        {
+            "id": 2247793,
+            "description": "Lote devol",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 325800
+            },
+            "voucher": "0",
+            "shop_name": "Sucursal_ Dot",
+            "date": "2018-11-08",
+            "batch_number": "803",
+            "authorization_code": null,
+            "type": "MASTERCARD",
+            "expiration_date": null,
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": null,
+            "card_number": null,
+            "transaction_date": "2018-10-11",
+            "presentation_date": null,
+            "category": "adjustment",
+            "stablishment_number": "21002111",
+            "clearing_number": null
+        },
+        {
+            "id": 2252311,
+            "description": "AJUSTE POR PROMOCION",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 21200
+            },
+            "voucher": "00005212",
+            "shop_name": "Sucursal_ Dot",
+            "date": "2018-11-08",
+            "batch_number": "9999",
+            "authorization_code": "00000",
+            "type": "VISA",
+            "expiration_date": "2018-12-08",
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": "91",
+            "card_number": "3216",
+            "transaction_date": "2018-10-10",
+            "presentation_date": "2018-10-24",
+            "category": "promotion",
+            "stablishment_number": "30188783",
+            "clearing_number": "343247"
+        },
+        {
+            "id": 2246576,
+            "description": "AJUSTE POR PROMOCION",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 25000
+            },
+            "voucher": "00005387",
+            "shop_name": "Sucursal_ Dot",
+            "date": "2018-11-05",
+            "batch_number": "9999",
+            "authorization_code": "00000",
+            "type": "VISA",
+            "expiration_date": "2018-12-05",
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": "91",
+            "card_number": "4966",
+            "transaction_date": "2018-10-21",
+            "presentation_date": "2018-10-24",
+            "category": "promotion",
+            "stablishment_number": "30188783",
+            "clearing_number": "279519"
+        },
+        {
+            "id": 2241774,
+            "description": "Lote devol",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 52200
+            },
+            "voucher": "0",
+            "shop_name": "Sucursal_Devoto",
+            "date": "2018-11-02",
+            "batch_number": "473",
+            "authorization_code": null,
+            "type": "MASTERCARD",
+            "expiration_date": null,
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": null,
+            "card_number": null,
+            "transaction_date": "2018-10-08",
+            "presentation_date": null,
+            "category": "adjustment",
+            "stablishment_number": "22249414",
+            "clearing_number": null
+        },
+        {
+            "id": 2218340,
+            "description": "AJ DESCUENTO POR CTA Y ORDEN BCO",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 82880
+            },
+            "voucher": null,
+            "shop_name": "Sucursal_ Dot",
+            "date": "2018-10-30",
+            "batch_number": null,
+            "authorization_code": null,
+            "type": "AMEX",
+            "expiration_date": null,
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": "AJ DESCUENTO POR CTA Y ORDEN BCO",
+            "card_number": null,
+            "transaction_date": null,
+            "presentation_date": null,
+            "category": "adjustment",
+            "stablishment_number": "9903609600",
+            "clearing_number": null
+        },
+        {
+            "id": 2218573,
+            "description": "AJ DESCUENTO POR CTA Y ORDEN BCO",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 290878
+            },
+            "voucher": null,
+            "shop_name": "Sucursal_Devoto",
+            "date": "2018-10-30",
+            "batch_number": null,
+            "authorization_code": null,
+            "type": "AMEX",
+            "expiration_date": "2018-11-29",
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": "AJ DESCUENTO POR CTA Y ORDEN BCO",
+            "card_number": null,
+            "transaction_date": "2018-10-25",
+            "presentation_date": "2018-10-25",
+            "category": "promotion",
+            "stablishment_number": "9909066367",
+            "clearing_number": null
+        },
+        {
+            "id": 2211123,
+            "description": "AJ DESCUENTO POR CTA Y ORDEN BCO",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": -201960
+            },
+            "voucher": null,
+            "shop_name": "Sucursal_Devoto",
+            "date": "2018-10-26",
+            "batch_number": null,
+            "authorization_code": null,
+            "type": "AMEX",
+            "expiration_date": "2018-11-25",
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": "AJ DESCUENTO POR CTA Y ORDEN BCO",
+            "card_number": null,
+            "transaction_date": "2018-10-23",
+            "presentation_date": "2018-10-23",
+            "category": "promotion",
+            "stablishment_number": "9909066367",
+            "clearing_number": null
+        },
+        {
+            "id": 2218029,
+            "description": "AJUSTE POR PROMOCION",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 25000
+            },
+            "voucher": "00005181",
+            "shop_name": "Sucursal_ Dot",
+            "date": "2018-10-26",
+            "batch_number": "9999",
+            "authorization_code": "00000",
+            "type": "VISA",
+            "expiration_date": "2018-11-25",
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": "91",
+            "card_number": "3962",
+            "transaction_date": "2018-10-06",
+            "presentation_date": "2018-10-24",
+            "category": "promotion",
+            "stablishment_number": "30188783",
+            "clearing_number": "278449"
+        },
+        {
+            "id": 2211122,
+            "description": "IVA DEBITO FISCAL 21%",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 2771
+            },
+            "voucher": null,
+            "shop_name": "Sucursal_Devoto",
+            "date": "2018-10-26",
+            "batch_number": null,
+            "authorization_code": null,
+            "type": "AMEX",
+            "expiration_date": "2018-11-25",
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": "IVA DEBITO FISCAL 21%",
+            "card_number": null,
+            "transaction_date": "2018-10-23",
+            "presentation_date": "2018-10-23",
+            "category": "refund",
+            "stablishment_number": "9909066367",
+            "clearing_number": null
+        },
+        {
+            "id": 2219041,
+            "description": "91-AJUST900ROMOCION QUIERO",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 25000
+            },
+            "voucher": "00000000",
+            "shop_name": "Sucursal_ Dot",
+            "date": "2018-10-26",
+            "batch_number": null,
+            "authorization_code": null,
+            "type": "PRISMA",
+            "expiration_date": "2018-11-25",
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": null,
+            "card_number": "3962",
+            "transaction_date": "2018-10-06",
+            "presentation_date": null,
+            "category": "promotion",
+            "stablishment_number": "30188783",
+            "clearing_number": "00278449"
+        },
+        {
+            "id": 2211121,
+            "description": "ACRED INT POR CTA Y ORDEN BCO",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 13196
+            },
+            "voucher": null,
+            "shop_name": "Sucursal_Devoto",
+            "date": "2018-10-26",
+            "batch_number": null,
+            "authorization_code": null,
+            "type": "AMEX",
+            "expiration_date": "2018-11-25",
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": "ACRED INT POR CTA Y ORDEN BCO",
+            "card_number": null,
+            "transaction_date": "2018-10-23",
+            "presentation_date": "2018-10-23",
+            "category": "promotion",
+            "stablishment_number": "9909066367",
+            "clearing_number": null
+        },
+        {
+            "id": 2213222,
+            "description": "91-AJUST900ROMOCION QUIERO",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 25000
+            },
+            "voucher": "00000000",
+            "shop_name": "Sucursal_ Dot",
+            "date": "2018-10-25",
+            "batch_number": null,
+            "authorization_code": null,
+            "type": "PRISMA",
+            "expiration_date": "2018-11-24",
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": null,
+            "card_number": "1284",
+            "transaction_date": "2018-09-27",
+            "presentation_date": null,
+            "category": "promotion",
+            "stablishment_number": "30188783",
+            "clearing_number": "00247083"
+        },
+        {
+            "id": 2212647,
+            "description": "AJUSTE POR PROMOCION",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 25000
+            },
+            "voucher": "00005132",
+            "shop_name": "Sucursal_ Dot",
+            "date": "2018-10-25",
+            "batch_number": "9999",
+            "authorization_code": "00000",
+            "type": "VISA",
+            "expiration_date": "2018-11-24",
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": "91",
+            "card_number": "1284",
+            "transaction_date": "2018-09-27",
+            "presentation_date": "2018-10-03",
+            "category": "promotion",
+            "stablishment_number": "30188783",
+            "clearing_number": "247083"
+        },
+        {
+            "id": 2213231,
+            "description": "91-AJUST900ROMOCION QUIERO",
+            "total_amount": {
+                "currency": "ARS",
+                "amount": 25000
+            },
+            "voucher": "00000000",
+            "shop_name": "Sucursal_Devoto",
+            "date": "2018-10-25",
+            "batch_number": null,
+            "authorization_code": null,
+            "type": "PRISMA",
+            "expiration_date": "2018-11-24",
+            "status": "UNINITIATED",
+            "responsible": null,
+            "motive": null,
+            "card_number": "5894",
+            "transaction_date": "2018-09-27",
+            "presentation_date": null,
+            "category": "promotion",
+            "stablishment_number": "31673114",
+            "clearing_number": "00247099"
+        }
+    ],
+    "total": 34387.51,
+    "pages": 5
+}
+    
+
+
+
+### Retrieve Chargebacks [GET]
+
++ Request (application/json)
+
+
+    + Header
+
+            Accept: application/json
+            Authorization: eyJ0eXAiOiJKV1QiLCJhbiAoOiJIUzI1NiJ9.eyJvX2F1dGhfYXBwbGljYXRpb25faWQiOjF9.h7ZNPpbd_Bu8yL27fmCAI_wgyZJI44b5eRRxwWUcwaQ
+
++ Response 200
+
+    [Chargeback Collection][]
+
++ Request (application/json)
+
+    + Header
+
+            Accept: application/json
+            Authorization: invalid_token
+
++ Response 401 (application/json)
+
+        {   "error": "Not Authorized"   }
+
+
+# Group Chargeback Status
+
+Endpoint with information about chargebacks status at Increase
+
+## List chargeback Status [/chargeback/statuses]
+
+Returns the list of status associated with chargebacks.
+
+### Retrieve [GET]
+
++ Request (application/json)
+
+
+    + Header
+
+            Accept: application/json
+           
+
++ Response 200 (application/json)
+
+       [
+    "RECOVERED",
+    "UNINITIATED",
+    "INITIATED",
+    "DISCARDED"
+]
+
+
+
+
+# Group Chargeback Categories
+
+Endpoint with information about chargebacks categories at Increase
+
+## List chargeback categories [/chargeback/categories]
+
+Returns the list of categories associated with chargebacks.
+
+### Retrieve [GET]
+
++ Request (application/json)
+
+
+    + Header
+
+            Accept: application/json
+           
+
++ Response 200 (application/json)
+
+      [
+    "chargeback",
+    "promotion",
+    "refund",
+    "rejection",
+    "adjustment"
+    ]
+
+
+
+
 
 # Group Reconciliation
 
