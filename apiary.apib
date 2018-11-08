@@ -2159,12 +2159,12 @@ Returns the list of banks associated with current client's existing Clearings.
         Exclude by name of card types 
     + status(optional, string)
         Filter by chargeback status
-        <a href="https://increasecardapi1.docs.apiary.io/#reference/chargeback-status"> See more API chargeback status</a>
+        <a href="https://increasecardapi1.docs.apiary.io/#reference/chargeback/status"> See more API chargeback status</a>
     + shop_id (optional,integer)
         Filter by shop id at Increase
     + category (optional, integer)
         Filter by chargeback category.
-        <a href="https://increasecardapi1.docs.apiary.io/#reference/chargeback-categories">See more API chargeback categories!</a>
+        <a href="https://increasecardapi1.docs.apiary.io/#reference/chargeback/categories">See more API chargeback categories!</a>
         Options:chargeback,promotion,'refund','rejection','adjustment'
     + order_by_column (optional, string, `pay_date`)
         Name of column to order by
@@ -2569,15 +2569,12 @@ Returns the list of banks associated with current client's existing Clearings.
         {   "error": "Not Authorized"   }
 
 
-# Group Chargeback Status
 
-Endpoint with information about chargebacks status at Increase
-
-## List chargeback Status [/chargeback/statuses]
+## List chargeback Statuses [/chargeback/statuses]
 
 Returns the list of status associated with chargebacks.
 
-### Retrieve [GET]
+### Retrieve chargeback statuses [GET]
 
 + Request (application/json)
 
@@ -2599,15 +2596,11 @@ Returns the list of status associated with chargebacks.
 
 
 
-# Group Chargeback Categories
+## List chargeback categories [/chargeback/categories]
 
 Endpoint with information about chargebacks categories at Increase
 
-## List chargeback categories [/chargeback/categories]
-
-Returns the list of categories associated with chargebacks.
-
-### Retrieve [GET]
+### Retrieve chargeback categories [GET]
 
 + Request (application/json)
 
