@@ -20,4 +20,4 @@ Cuando algo cambia, hay 2 formas para entender dichos cambios:
 Contáctanos
 -----------
 
-Si tenes alguna idea o sugerencia para ayudarnos a hacer que Increasecard API sea mejor, por favor no dudes en mandar un mail a <mailto:api@increasecard.com> o deja un issue en Github.
+Si tenes alguna idea o sugerencia para ayudarnos a hacer que Increasecard API sea mejor, por favor no dudes en mandar un mail a <mailto:support@increasecard.com> o deja un issue en Github.
