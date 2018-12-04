@@ -694,13 +694,19 @@ Clearing endpoints with different information about the current client Clearings
 Returns the Clearing of the current client.
 
 + Parameters
-    + page (optional, integer)
+    + page (optional, number)
         Page number to get
         + Default: 1
     + daterange (optional, string, `29/05/2015 - 29/05/2015`)
         Filter by date range.
     + shop_id (optional, string)
         Filter by shop id
+    + provider (optional, string)
+        Filter by provider
+    + from_total_earn (optional, number)
+        Filter clearings with total earn (in cents) greater than or equal from_total_earn
+    + to_total_earn (optional, number)
+        Filter clearings with total earn (in cents) less than or equal from_total_earn
     + stablishment_id (optional, string)
         Filter by stablishment id
     + stablishment_number (optional, string, `123456789`)
@@ -2137,12 +2143,12 @@ Returns the list of banks associated with current client's existing Clearings.
 + Response 401 (application/json)
 
         {   "error": "Not Authorized"   }
-        
-        
+
+
 
 # Group Chargebacks
 
-## Chargeback Collection [/chargebacks{?card_type,daterange,category,status,order_by_column,order_by_direction,page}] 
+## Chargeback Collection [/chargebacks{?card_type,daterange,category,status,order_by_column,order_by_direction,page}]
 
 + Parameters
     + page (optional, integer)
@@ -2156,7 +2162,7 @@ Returns the list of banks associated with current client's existing Clearings.
     + card_type (optional, string, `visa`)
         Filter by name of card type
     + not_types (optional,array)
-        Exclude by name of card types 
+        Exclude by name of card types
     + status(optional, string)
         Filter by chargeback status
         <a>See more at API chargeback status</a>
@@ -2170,7 +2176,7 @@ Returns the list of banks associated with current client's existing Clearings.
         Name of column to order by
     + order_by_direction (string, `asc`)
         Order direction. Options: asc, desc
-        
+
 + Model (application/json)
 
 {
@@ -2539,7 +2545,7 @@ Returns the list of banks associated with current client's existing Clearings.
     "total": 34387.51,
     "pages": 5
 }
-    
+
 
 
 
@@ -2582,7 +2588,7 @@ Returns the list of status associated with chargebacks.
     + Header
 
             Accept: application/json
-           
+
 
 + Response 200 (application/json)
 
@@ -2608,7 +2614,7 @@ Endpoint with information about chargebacks categories at Increase
     + Header
 
             Accept: application/json
-           
+
 
 + Response 200 (application/json)
 
